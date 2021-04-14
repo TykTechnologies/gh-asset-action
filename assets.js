@@ -17,7 +17,7 @@ export async function getAsset(client, tag, kind, repo, owner='TykTechnologies')
 	  })
     for (const a of releases.find(r => r.tag_name == tag).assets) {
 	// Artefacts don't have the v from the tag
-	if (a.name.indexOf(tag.replace('/^v/', ''))+a.name.indexOf(kind) >= 0) {
+	if (a.name.indexOf(tag.replace('/^v/', ''))>=0 && a.name.indexOf(kind)>=0) {
 	    return {
 		name: a.name,
 		url: a.browser_download_url,
@@ -27,7 +27,7 @@ export async function getAsset(client, tag, kind, repo, owner='TykTechnologies')
 	    }
 	}
     }
-    throw new Error("no asset found")
+    throw new Error("asset not found")
 }
 
 /**
@@ -46,6 +46,6 @@ export async function writeAsset(client, asset, dest) {
 	}
     })
     const buffer = Buffer.from(content.data)
-    fs.createWriteStream(dest).write(buffer)
-    return content.url
+    fs.createWriteStream(dest || asset.name).write(buffer)
+    return asset.url
 }

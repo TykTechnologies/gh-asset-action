@@ -1,0 +1,24 @@
+name: 'gh-asset-action'
+description: 'Download a release artefact'
+inputs:
+  tag: 
+    description: 'git tag for release'
+    required: true
+  kind: 
+    description: 'text fragment to match against'
+    required: true
+  dest: 
+    description: 'file name to write to'
+    required: false
+  owner: 
+    description: 'repo owner/org'
+    required: false
+  repo: 
+    description: 'repo to operate on'
+    required: false
+outputs:
+  url:
+    description: 'URL to download the asset via the browser'
+runs:
+  using: 'node12'
+  main: 'index.js'

@@ -1,12 +1,20 @@
-import { client } from './octokit';
+// import { client } from './octokit';
+import core from '@actions/core'
+import client from '@actions/github'
 import { getAsset, writeAsset } from './assets';
 
+context = client.context
 
-getAsset(client, 'v1.3.0-rc4', 'linux_amd64.deb', 'tyk-pump')
+getAsset(client,
+	 core.getInput('tag'),
+	 core.getInput('kind'),
+	 core.getInput('tag'),
+	 core.getInput('repo') || context.repo,
+	 core.getInput('owner') || context.owner)
     .then((a) => {
 	console.debug(a)
-	return writeAsset(client, a, 'tyk-pump.deb')
+	return writeAsset(client, a, core.getInput('dest'))
     })
-    .then((f) => console.info(`Downloaded file from ${f}`))
-    .catch((e) => console.error(e))
+    .then((u) => core.setOutput('url', u))
+    .catch((e) => core.setFailed(e.Message))
 
