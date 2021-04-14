@@ -6094,12 +6094,6 @@ var __webpack_exports__ = {};
 // ESM COMPAT FLAG
 __nccwpck_require__.r(__webpack_exports__);
 
-// EXTERNAL MODULE: ./node_modules/@actions/core/lib/core.js
-var core = __nccwpck_require__(864);
-var core_default = /*#__PURE__*/__nccwpck_require__.n(core);
-// EXTERNAL MODULE: ./node_modules/@actions/github/lib/github.js
-var github = __nccwpck_require__(366);
-var github_default = /*#__PURE__*/__nccwpck_require__.n(github);
 // EXTERNAL MODULE: external "fs"
 var external_fs_ = __nccwpck_require__(747);
 var external_fs_default = /*#__PURE__*/__nccwpck_require__.n(external_fs_);
@@ -6123,9 +6117,11 @@ async function getAsset(client, tag, kind, repo, owner='TykTechnologies') {
 	      owner: owner,
 	      repo: repo,
 	  })
-    for (const a of releases.find(r => r.tag_name == tag).assets) {
+    const rel = releases.find(r => r.tag_name == tag)
+    if (! rel) throw new Error("release not found")
+    for (const a of rel.assets) {
 	// Artefacts don't have the v from the tag
-	if (a.name.indexOf(tag.replace('/^v/', ''))>=0 && a.name.indexOf(kind)>=0) {
+	if (a.name.indexOf(tag.replace('/^v/', ''))+a.name.indexOf(kind)>=0) {
 	    return {
 		name: a.name,
 		url: a.browser_download_url,
@@ -6160,25 +6156,27 @@ async function writeAsset(client, asset, dest) {
 
 ;// CONCATENATED MODULE: ./index.js
 // import { client } from './octokit';
+const github = __nccwpck_require__(366)
+const core = __nccwpck_require__(864)
+;
 
-
-
-
-context = (github_default()).context
-client = core_default().getInput('token') ? github_default().getOctokit(core_default().getInput('token')) : (github_default())
-
+const client = github.getOctokit(core.getInput('token') || process.env.GITHUB_TOKEN)
+const [owner, repo] = process.env.GITHUB_REPOSITORY.split('/')
+core.info("setup done")
+// The default values help when testing locally
 getAsset(client,
-	 core_default().getInput('tag'),
-	 core_default().getInput('kind'),
-	 core_default().getInput('tag'),
-	 core_default().getInput('repo') || context.repo,
-	 core_default().getInput('owner') || context.owner)
+	 core.getInput('tag') || "v1.3.0-rc4",
+	 core.getInput('kind') || 'linux_amd64.deb',
+	 core.getInput('repo') || repo,
+	 core.getInput('owner') || owner)
     .then((a) => {
-	console.debug(a)
-	return writeAsset(client, a, core_default().getInput('dest'))
+	console.log(a)
+	return writeAsset(client, a, core.getInput('dest') || "tyk_pump.deb")
     })
-    .then((u) => core_default().setOutput('url', u))
-    .catch((e) => core_default().setFailed(e.Message))
+    .then((u) => core.setOutput('url', u))
+    .catch((e) => {
+	core.setFailed(e.message)
+    })
 
 
 })();

@@ -24,4 +24,4 @@ outputs:
     description: 'URL to download the asset via the browser'
 runs:
   using: 'node12'
-  main: 'index.js'
+  main: 'dist/index.js'

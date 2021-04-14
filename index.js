@@ -1,21 +1,23 @@
 // import { client } from './octokit';
-import core from '@actions/core'
-import github from '@actions/github'
+const github = require('@actions/github')
+const core = require('@actions/core')
 import { getAsset, writeAsset } from './assets';
 
-context = github.context
-client = core.getInput('token') ? github.getOctokit(core.getInput('token')) : github
+const client = github.getOctokit(core.getInput('token') || process.env.GITHUB_TOKEN)
+const [owner, repo] = process.env.GITHUB_REPOSITORY.split('/')
 
+// The default values help when testing locally
 getAsset(client,
-	 core.getInput('tag'),
-	 core.getInput('kind'),
-	 core.getInput('tag'),
-	 core.getInput('repo') || context.repo,
-	 core.getInput('owner') || context.owner)
+	 core.getInput('tag') || "v1.3.0-rc4",
+	 core.getInput('kind') || 'linux_amd64.deb',
+	 core.getInput('repo') || repo,
+	 core.getInput('owner') || owner)
     .then((a) => {
-	console.debug(a)
-	return writeAsset(client, a, core.getInput('dest'))
+	console.log(a)
+	return writeAsset(client, a, core.getInput('dest') || "tyk-pump.deb")
     })
     .then((u) => core.setOutput('url', u))
-    .catch((e) => core.setFailed(e.Message))
+    .catch((e) => {
+	core.setFailed(e.message)
+    })
 

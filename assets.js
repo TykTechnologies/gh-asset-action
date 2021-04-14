@@ -15,9 +15,11 @@ export async function getAsset(client, tag, kind, repo, owner='TykTechnologies')
 	      owner: owner,
 	      repo: repo,
 	  })
-    for (const a of releases.find(r => r.tag_name == tag).assets) {
+    const rel = releases.find(r => r.tag_name == tag)
+    if (! rel) throw new Error("release tagged {tag} not found")
+    for (const a of rel.assets) {
 	// Artefacts don't have the v from the tag
-	if (a.name.indexOf(tag.replace('/^v/', ''))>=0 && a.name.indexOf(kind)>=0) {
+	if (a.name.indexOf(tag.replace('/^v/', ''))+a.name.indexOf(kind)>=0) {
 	    return {
 		name: a.name,
 		url: a.browser_download_url,
@@ -27,7 +29,7 @@ export async function getAsset(client, tag, kind, repo, owner='TykTechnologies')
 	    }
 	}
     }
-    throw new Error("asset not found")
+    throw new Error("no asset matching {kind} found for tag {tag}")
 }
 
 /**

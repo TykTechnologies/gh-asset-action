@@ -2,9 +2,9 @@
   "name": "gh-asset-action",
   "version": "1.0.0",
   "description": "interact with github assets",
-  "main": "dist/index.js",
+  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 0"
   },
   "repository": {
     "type": "git",
@@ -19,9 +19,6 @@
   "homepage": "https://github.com/TykTechnologies/gh-asset-action#readme",
   "dependencies": {
     "@actions/core": "^1.2.7",
-    "@actions/github": "^4.0.0",
-    "@octokit/plugin-retry": "^3.0.7",
-    "@octokit/plugin-throttling": "^3.4.1",
-    "@octokit/rest": "^18.5.2"
+    "@actions/github": "^4.0.0"
   }
 }
