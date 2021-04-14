@@ -1,0 +1,25 @@
+{
+  "name": "gh-asset-action",
+  "version": "1.0.0",
+  "description": "interact with github assets",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TykTechnologies/gh-asset-action.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/TykTechnologies/gh-asset-action/issues"
+  },
+  "homepage": "https://github.com/TykTechnologies/gh-asset-action#readme",
+  "dependencies": {
+    "@octokit/plugin-retry": "^3.0.7",
+    "@octokit/plugin-throttling": "^3.4.1",
+    "@octokit/rest": "^18.5.2"
+  }
+}
