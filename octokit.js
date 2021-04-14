@@ -1,6 +1,6 @@
 // Used for local testing
 // In index.js, you can import { client } from './octokit'
-// instead of '@octokit/rest'
+// instead of '@actions/github'
 
 import { Octokit } from '@octokit/rest';
 import { retry } from "@octokit/plugin-retry";
