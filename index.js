@@ -1,9 +1,10 @@
 // import { client } from './octokit';
 import core from '@actions/core'
-import client from '@actions/github'
+import github from '@actions/github'
 import { getAsset, writeAsset } from './assets';
 
-context = client.context
+context = github.context
+client = core.getInput('token') ? github.getOctokit(core.getInput('token')) : github
 
 getAsset(client,
 	 core.getInput('tag'),

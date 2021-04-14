@@ -16,6 +16,9 @@ inputs:
   repo: 
     description: 'repo to operate on'
     required: false
+  token: 
+    description: 'required for private repos or draft releases'
+    required: false
 outputs:
   url:
     description: 'URL to download the asset via the browser'
