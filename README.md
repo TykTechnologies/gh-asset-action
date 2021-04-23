@@ -32,6 +32,11 @@ A URL you can use in the browser to fetch the same asset
 
 ## Example usage
 
-uses: actions/hello-world-javascript-action@v1.1
-with:
-  who-to-greet: 'Mona the Octocat'
+```
+- uses: TykTechnologies/gh-asset-action@main
+  with:
+	tag: ${{ needs.goreleaser.outputs.tag }}
+	kind: "_linux_amd64.deb"
+	dest: "aws/tyk-pump.deb"
+	token: ${{ secrets.GITHUB_TOKEN }}
+```
